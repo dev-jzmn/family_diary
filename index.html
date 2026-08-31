@@ -1,16 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Draft Page</title>
 </head>
 
 <body>
-    <h1>Hello!</h1>
-    <p>This is my draft webpage. I forgot everything about html & CSS!!</p>
-    <p>So I'm trying to review the languages.</p>
-    <p>But I'm also excited to learn about javascript :) 
-       I've never learned that programing language before.
+
+    <h2>
+        이번 주의 질문<br>
+        The Question of This Week
+    </h2>
+
+    <p>
+        학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?<br>
+        What are your best memories from your school days?
     </p>
-    <button>Click me</button>
+
+    <textarea
+        id="answer"
+        rows="10"
+        cols="50"
+        placeholder="여기에 답변을 적어주세요 (Write your answer here)"></textarea>
+
+    <br>
+
+    <button id="submitButton">Submit</button>
+    <br>
+    <p id="message"></p>
+
+
+<!-- ------------ javascript code ------------ -->
+<script>
+    const button = document.getElementById("submitButton");
+
+    button.addEventListener("click", function() {
+        const answer = document.getElementById("answer").value;
+        console.log(answer);
+        if (answer.trim() === "") {
+            document.getElementById("message").textContent = "Please write your answer.";
+        } 
+        else {
+            document.getElementById("message").textContent = "Submitted succesfully!";
+            document.getElementById("answer").value = "";
+        }
+    });
+</script>
+<!-- ------------------------------------------ -->
 </body>
+
 </html>
