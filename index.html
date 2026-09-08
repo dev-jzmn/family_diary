@@ -18,6 +18,14 @@
     </p>
 
     <textarea
+        id="respondent"
+        rows="1"
+        cols="50"
+        placeholder="여기에 누군지 적으세요 (Write who you are here)"></textarea>
+
+    <br>
+
+    <textarea
         id="answer"
         rows="10"
         cols="50"
@@ -27,23 +35,51 @@
 
     <button id="submitButton">Submit</button>
     <br>
-    <p id="message"></p>
-
+    <p id="message"></p><br>
+    <p id="message2"></p>
 
 <!-- ------------ javascript code ------------ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+    const SUPABASE_URL = "https://uraebkvvqodlckqjxity.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_pZVfjCg4yC7kmB9CzFilVQ_2Kt7gSpt";
+
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const button = document.getElementById("submitButton");
 
-    button.addEventListener("click", function() {
+    button.addEventListener("click", async function() {
         const answer = document.getElementById("answer").value;
-        console.log(answer);
+        const respondent = document.getElementById("respondent").value;
+
         if (answer.trim() === "") {
             document.getElementById("message").textContent = "Please write your answer.";
         } 
+
+        if (respondent.trim() === "") {
+            document.getElementById("message2").textContent = "Please write who you are.";
+        }
+
+        const { error } = await db
+        .from("responses")
+        .insert({
+            question: "학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?",
+            answer: answer,
+            respondent: respondent,
+            week_number: 1
+        });
+
+        if (error) {
+            console.error("Supabase error:", error);
+            document.getElementById("message").textContent =
+                "제출 중 문제가 발생했습니다.";
+        }
+
         else {
             document.getElementById("message").textContent = "Submitted succesfully!";
             document.getElementById("answer").value = "";
+            document.getElementById("respondent").value = "";
         }
+
     });
 </script>
 <!-- ------------------------------------------ -->
