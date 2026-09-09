@@ -12,9 +12,9 @@
         The Question of This Week
     </h2>
 
-    <p>
-        학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?<br>
-        What are your best memories from your school days?
+    <p id="question">
+        <!-- 학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?<br>
+        What are your best memories from your school days? -->
     </p>
 
     <textarea
@@ -43,8 +43,35 @@
 <script>
     const SUPABASE_URL = "https://uraebkvvqodlckqjxity.supabase.co";
     const SUPABASE_KEY = "sb_publishable_pZVfjCg4yC7kmB9CzFilVQ_2Kt7gSpt";
-
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const startDate = new Date("2026-09-08");
+    const today = new Date();
+
+    const difference = today - startDate;
+    const daysPassed = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+    const weekNumber = Math.floor(daysPassed / 7) + 1;
+
+    async function loadQuestion() {
+        const { data: questionData, error: questionError } = await db
+            .from("questions")
+            .select("question_text")
+            .eq("week_number", weekNumber)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .single();
+
+        if (questionError) {
+            console.error("Question error:", questionError);
+        } else {
+            document.getElementById("question").textContent =
+                questionData.question_text;
+        }
+    }
+
+    loadQuestion();
+
     const button = document.getElementById("submitButton");
 
     button.addEventListener("click", async function() {
@@ -71,7 +98,7 @@
         if (error) {
             console.error("Supabase error:", error);
             document.getElementById("message").textContent =
-                "제출 중 문제가 발생했습니다.";
+                "Something went wrong while submitting your answer.";
         }
 
         else {
