@@ -2,20 +2,24 @@
 <html>
 
 <head>
-    <title>Draft Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Weekly Question</title>
 </head>
 
 <body>
 
+    <button id="themeButton">Night Mode</button>
     <h2>
-        이번 주의 질문<br>
-        The Question of This Week
+        The Question of This Week<br>
+        이번 주의 질문
     </h2>
 
-    <p id="question">
-        <!-- 학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?<br>
-        What are your best memories from your school days? -->
-    </p>
+    <p id="question_en"></p>
+    <p id="question_ko"></p>
 
     <textarea
         id="respondent"
@@ -35,7 +39,8 @@
 
     <button id="submitButton">Submit</button>
     <br>
-    <p id="message"></p><br>
+    <p id="message"></p>
+    <p id="message_ko"></p>
     <p id="message2"></p>
 
 <!-- ------------ javascript code ------------ -->
@@ -56,7 +61,7 @@
     async function loadQuestion() {
         const { data: questionData, error: questionError } = await db
             .from("questions")
-            .select("question_text")
+            .select("question_en, question_ko")
             .eq("week_number", weekNumber)
             .order("created_at", { ascending: false })
             .limit(1)
@@ -65,16 +70,25 @@
         if (questionError) {
             console.error("Question error:", questionError);
         } else {
-            document.getElementById("question").textContent =
-                questionData.question_text;
+            document.getElementById("question_en").textContent =
+                questionData.question_en;
+            document.getElementById("question_ko").textContent =
+                questionData.question_ko;
         }
     }
 
     loadQuestion();
 
-    const button = document.getElementById("submitButton");
+    // clicked when the answer is submitted
+    const submit_button = document.getElementById("submitButton");
+    // control theme mode
+    const themeButton = document.getElementById("themeButton");
 
-    button.addEventListener("click", async function() {
+    themeButton.addEventListener("click", function () {
+        document.body.classList.toggle("dark-mode");
+    });
+
+    submit_button.addEventListener("click", async function() {
         const answer = document.getElementById("answer").value;
         const respondent = document.getElementById("respondent").value;
 
@@ -89,7 +103,7 @@
         const { error } = await db
         .from("responses")
         .insert({
-            question: "학창 시절 가장 기억에 남는 일탈이나 추억은 무엇인가요?",
+            question: question_en,
             answer: answer,
             respondent: respondent,
             week_number: 1
@@ -102,11 +116,11 @@
         }
 
         else {
-            document.getElementById("message").textContent = "Submitted succesfully!";
+            document.getElementById("message").textContent = "Submitted succesfully! ";
+            document.getElementById("message_ko").textContent = "성공적으로 제출되었습니다! ";
             document.getElementById("answer").value = "";
             document.getElementById("respondent").value = "";
         }
-
     });
 </script>
 <!-- ------------------------------------------ -->
