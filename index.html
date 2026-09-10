@@ -20,6 +20,10 @@
 
     <p id="question_en"></p>
     <p id="question_ko"></p>
+    <p>You don't like the question? </p>
+    <button id="refreshQuestion">
+        Get new question
+    </button><br><br>
 
     <textarea
         id="respondent"
@@ -83,44 +87,58 @@
     const submit_button = document.getElementById("submitButton");
     // control theme mode
     const themeButton = document.getElementById("themeButton");
+    // generate a new question
+    const refreshQuestion = document.getElementById("refreshQuestion");
 
     themeButton.addEventListener("click", function () {
         document.body.classList.toggle("dark-mode");
+    });
+
+    refreshQuestion.addEventListener("click", async function() {
+        const { data, error } = await db.functions.invoke("generate-question", {
+            body: {}
+        });
+
+        if (error) {
+            console.error("Generate question error:", error);
+            return;
+        }
+
+        console.log("Generated question:", data);
     });
 
     submit_button.addEventListener("click", async function() {
         const answer = document.getElementById("answer").value;
         const respondent = document.getElementById("respondent").value;
 
-        if (answer.trim() === "") {
-            document.getElementById("message").textContent = "Please write your answer.";
+        if (answer.trim() === "" || respondent.trim() === "") {
+            document.getElementById("message").textContent = "Please write your answer/name.";
         } 
 
-        if (respondent.trim() === "") {
-            document.getElementById("message2").textContent = "Please write who you are.";
-        }
+        else{
+            const { error } = await db
+            .from("responses")
+            .insert({
+                question: question_en.value,
+                answer: answer,
+                respondent: respondent,
+                week_number: 1
+            });
 
-        const { error } = await db
-        .from("responses")
-        .insert({
-            question: question_en,
-            answer: answer,
-            respondent: respondent,
-            week_number: 1
-        });
+            if (error) {
+                console.error("Supabase error:", error);
+                document.getElementById("message").textContent =
+                    "Something went wrong while submitting your answer.";
+            }
 
-        if (error) {
-            console.error("Supabase error:", error);
-            document.getElementById("message").textContent =
-                "Something went wrong while submitting your answer.";
+            else {
+                document.getElementById("message").textContent = "Submitted succesfully! ";
+                document.getElementById("message_ko").textContent = "성공적으로 제출되었습니다! ";
+                document.getElementById("answer").value = "";
+                document.getElementById("respondent").value = "";
+            }
         }
-
-        else {
-            document.getElementById("message").textContent = "Submitted succesfully! ";
-            document.getElementById("message_ko").textContent = "성공적으로 제출되었습니다! ";
-            document.getElementById("answer").value = "";
-            document.getElementById("respondent").value = "";
-        }
+        
     });
 </script>
 <!-- ------------------------------------------ -->
