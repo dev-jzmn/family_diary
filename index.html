@@ -67,6 +67,8 @@
         .from("questions")
         .select("id, question_en, question_ko")
         .eq("week_number", weekNumber)
+        .order("created_at", { ascending: false })
+        .limit(1)
         .single();
 
         if (questionError) {
