@@ -64,12 +64,11 @@
 
     async function loadQuestion() {
         const { data: questionData, error: questionError } = await db
-            .from("questions")
-            .select("question_en, question_ko")
-            .eq("week_number", weekNumber)
-            .order("created_at", { ascending: false })
-            .limit(1)
-            .single();
+        .from("questions")
+        .select("id, question_en, question_ko")
+        .eq("week_number", weekNumber)
+        .eq("is_selected", true)
+        .single();
 
         if (questionError) {
             console.error("Question error:", questionError);
@@ -104,7 +103,11 @@
             return;
         }
 
-        console.log("Generated question:", data);
+        document.getElementById("question_en").textContent =
+            data.question_en;
+
+        document.getElementById("question_en").textContent =
+            data.question_ko;
     });
 
     submit_button.addEventListener("click", async function() {
@@ -116,10 +119,12 @@
         } 
 
         else{
+            const currentQuestionId = questionData.id;
+            const currentQuestion = document.getElementById("question_en").textContent;
             const { error } = await db
             .from("responses")
             .insert({
-                question: question_en.value,
+                question_id: currentQuestionId,
                 answer: answer,
                 respondent: respondent,
                 week_number: 1
