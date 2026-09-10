@@ -28,6 +28,10 @@ body.dark-mode button {
     color: white;
 }
 
+body.dark-mode a{
+    color: rgb(141, 196, 247);
+}
+
 .container {
     max-width: 600px;
     margin: 40px auto;
@@ -77,7 +81,6 @@ textarea{
 button {
     background-color: #dadada;
 
-    margin-top: 20px;
     padding: 14px;
 
     font-family: inherit;
@@ -91,8 +94,96 @@ button {
 
 #submitButton{
     width: 100%;
+    margin-top: 20px;
 }
 
 #themeButton{
     width: 20%;
+}
+
+#refreshButton{
+    width: 20%
+}
+
+#why_this_project{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+/* about style */
+
+#about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px 30px;
+}
+
+.storyworth {
+    display: block;
+    margin: 0 auto;
+
+    max-width: 75%;
+    height: auto;
+}
+
+#intro {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 50px;
+}
+
+#abby_story {
+    font-family: "Times New Roman", serif;
+    font-size: 22px;
+    line-height: 1.8;
+
+    padding: 50px;
+    margin: 40px 0;
+
+    background-color: rgba(128, 128, 128, 0.08);
+}
+
+#closing {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+#return_link {
+    display: inline-block;
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    #about-container {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    #intro {
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 35px;
+    }
+
+    #abby_story {
+        font-size: 18px;
+        line-height: 1.7;
+        padding: 25px 20px;
+        margin: 35px 0;
+    }
+
+    #closing {
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+    #return-link {
+        font-size: 17px;
+    }
 }
