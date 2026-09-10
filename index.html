@@ -67,7 +67,6 @@
         .from("questions")
         .select("id, question_en, question_ko")
         .eq("week_number", weekNumber)
-        .eq("is_selected", true)
         .single();
 
         if (questionError) {
