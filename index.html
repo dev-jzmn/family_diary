@@ -63,8 +63,8 @@
 
     const difference = today - startDate;
     const daysPassed = Math.floor(difference / (1000 * 60 * 60 * 24));
-
     const weekNumber = Math.floor(daysPassed / 7) + 1;
+    let question_id = null;
 
     async function loadQuestion() {
         const { data: questionData, error: questionError } = await db
@@ -83,7 +83,11 @@
             document.getElementById("question_ko").textContent =
                 questionData.question_ko;
         }
+
+        question_id = questionData.id;
     }
+    
+
 
     loadQuestion();
 
@@ -132,7 +136,7 @@
         } 
 
         else{
-            const currentQuestionId = questionData.id;
+            const currentQuestionId = question_id;
             const currentQuestion = document.getElementById("question_en").textContent;
             const { error } = await db
             .from("responses")
