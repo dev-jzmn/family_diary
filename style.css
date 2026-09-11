@@ -32,6 +32,9 @@ body.dark-mode a{
     color: rgb(141, 196, 247);
 }
 
+a{
+    color: #6ea6d7;
+}
 .container {
     max-width: 600px;
     margin: 40px auto;
@@ -80,6 +83,7 @@ textarea{
 
 button {
     background-color: #dadada;
+    color:#121212;
 
     padding: 14px;
 
@@ -97,18 +101,14 @@ button {
     margin-top: 20px;
 }
 
-#themeButton{
-    width: 20%;
-}
-
 #refreshButton{
     width: 20%
 }
 
 #why_this_project{
+    padding: 14px;
     position: absolute;
-    top: 30px;
-    right: 30px;
+    right: 14px;
 }
 
 /* about style */
@@ -147,12 +147,12 @@ button {
 #closing {
     font-size: 20px;
     line-height: 1.8;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 #return_link {
     display: inline-block;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 @media (max-width: 600px) {
