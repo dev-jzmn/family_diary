@@ -17,6 +17,7 @@
     <h2>
         The Question of This Week<br>
         이번 주의 질문
+        <img src="love-letter.png" alt="love-letter" class="emoji-icon">
     </h2>
 
     <p id="question_en"></p>
@@ -26,10 +27,7 @@
     </p>
     <button id="refreshQuestion">
         Get a new question
-    </button><br><br>
-
-    <input type="file" id="photoInput" accept="image/*">
-    <br><br>
+    </button><br><br><br>
 
     <textarea
         id="respondent"
@@ -46,6 +44,11 @@
         placeholder="여기에 답변을 적어주세요 (Write your answer here)"></textarea>
 
     <br>
+        <form id="photoForm">
+        <input type="file" id="photoInput" accept="image/*"><br>
+        <img id="photoPreview" alt="선택한 사진 미리보기" style="display: none; max-width: 300px;"><br>
+        <button type="button" id="removePhotoButton">Remove photo</button>
+    </form>
 
     <button id="submitButton">Submit</button>
     <br>
@@ -140,13 +143,49 @@
         refreshQuestion.textContent = "Get a new question";
     });
 
+    // file remove
+    const photoInput = document.getElementById("photoInput");
+    const photoForm = document.getElementById("photoForm");
+    const removePhotoButton = document.getElementById("removePhotoButton");
+
+    removePhotoButton.style.display = "none";
+
+    photoInput.addEventListener("change", function() {
+        if (photoInput.files.length > 0) {
+            removePhotoButton.style.display = "inline";
+        } else {
+            removePhotoButton.style.display = "none";
+        }
+    });
+
+    removePhotoButton.addEventListener("click", function() {
+        photoForm.reset();
+        photoInput.value = "";
+
+        photoPreview.src = "";
+        photoPreview.style.display = "none";
+    });
+
+    // photo preview
+    const photoPreview = document.getElementById("photoPreview");
+
+    photoInput.addEventListener("change", function() {
+        const file = photoInput.files[0];
+
+        if (file) {
+            const previewUrl = URL.createObjectURL(file);
+
+            photoPreview.src = previewUrl;
+            photoPreview.style.display = "block";
+        }
+    });
 
     // submitting
     submit_button.addEventListener("click", async function() {
         // photo uploading 
         const photoInput = document.getElementById("photoInput");
         const file = photoInput.files[0];
-
+        
         let photoPath = null;
 
         if (file) {
