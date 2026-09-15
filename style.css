@@ -61,6 +61,45 @@ h1 {
     margin-bottom: 30px;
 }
 
+#photoInput {
+    font-family: inherit;
+    font-size: 16px;
+    color: inherit;
+
+    width: 100%;
+    max-width: 500px;
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+
+    background-color: transparent;
+}
+
+#photoInput::file-selector-button {
+    background-color:#dadada;
+    font-family: inherit;
+    font-size: 16px;
+
+    padding: 10px 16px;
+    margin-right: 12px;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+body.dark-mode #photoInput {
+    border-color: #555;
+    color: #f1f1f1;
+}
+
+body.dark-mode #photoInput::file-selector-button {
+    background-color: #333;
+    color: white;
+}
+
 textarea{
     width: 100%;
 

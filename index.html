@@ -28,6 +28,9 @@
         Get a new question
     </button><br><br>
 
+    <input type="file" id="photoInput" accept="image/*">
+    <br><br>
+
     <textarea
         id="respondent"
         rows="1"
@@ -58,12 +61,19 @@
     const SUPABASE_KEY = "sb_publishable_pZVfjCg4yC7kmB9CzFilVQ_2Kt7gSpt";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const startDate = new Date("2026-09-08");
-    const today = new Date();
+    function getWeekNumber() {
+        const start = new Date("2026-09-07T00:00:00-07:00");
+        const now = new Date();
 
-    const difference = today - startDate;
-    const daysPassed = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const weekNumber = Math.floor(daysPassed / 7) + 1;
+        const diff = now.getTime() - start.getTime();
+
+        return Math.floor(
+            diff / (1000 * 60 * 60 * 24 * 7)
+        ) + 1;
+    }
+
+    const weekNumber = getWeekNumber();
+
     let question_id = null;
 
     async function loadQuestion() {
@@ -109,6 +119,7 @@
     }
 
     refreshQuestion.addEventListener("click", async function() {
+        refreshQuestion.textContent = "Generating a new question ...";
         const { data, error } = await db.functions.invoke("generate-question", {
             body: {
                 weekNumber : weekNumber
@@ -117,6 +128,7 @@
 
         if (error) {
             console.error("Generate question error:", error);
+            refreshQuestion.textContent = "Try again";
             return;
         }
 
@@ -125,9 +137,35 @@
 
         document.getElementById("question_ko").textContent =
             data.question_ko;
+        refreshQuestion.textContent = "Get a new question";
     });
 
+
+    // submitting
     submit_button.addEventListener("click", async function() {
+        // photo uploading 
+        const photoInput = document.getElementById("photoInput");
+        const file = photoInput.files[0];
+
+        let photoPath = null;
+
+        if (file) {
+            const filePath =
+                `${weekNumber}/${Date.now()}-${file.name}`;
+
+            const { data: uploadData, error: uploadError } =
+                await db.storage
+                    .from("family_photos")
+                    .upload(filePath, file);
+
+            if (uploadError) {
+                console.error("Photo upload error:", uploadError);
+                return;
+            }
+
+            photoPath = uploadData.path;
+        }
+
         const answer = document.getElementById("answer").value;
         const respondent = document.getElementById("respondent").value;
 
@@ -144,7 +182,8 @@
                 question_id: currentQuestionId,
                 answer: answer,
                 respondent: respondent,
-                week_number: 1
+                week_number: weekNumber,
+                photo_path: photoPath
             });
 
             if (error) {
@@ -156,6 +195,7 @@
             else {
                 document.getElementById("message").textContent = "Submitted succesfully! ";
                 document.getElementById("message_ko").textContent = "성공적으로 제출되었습니다! ";
+                document.getElementById("photoInput").value = "";
                 document.getElementById("answer").value = "";
                 document.getElementById("respondent").value = "";
             }
