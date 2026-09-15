@@ -78,6 +78,7 @@ h1 {
 
 #photoInput::file-selector-button {
     background-color:#dadada;
+    color:#121212;
     font-family: inherit;
     font-size: 16px;
 
@@ -98,6 +99,24 @@ body.dark-mode #photoInput {
 body.dark-mode #photoInput::file-selector-button {
     background-color: #333;
     color: white;
+}
+
+@media (max-width: 600px) {
+    #photoInput {
+        width: 100%;
+        max-width: 100%;
+
+        font-size: 14px;
+        padding: 8px;
+
+        box-sizing: border-box;
+    }
+
+    #photoInput::file-selector-button {
+        font-size: 14px;
+        padding: 8px 12px;
+        margin-right: 8px;
+    }
 }
 
 textarea{
