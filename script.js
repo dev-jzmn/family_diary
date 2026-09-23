@@ -1,8 +1,13 @@
+const themeButton = document.getElementById("themeButton");
+const themeText = document.getElementById("themeText");
+const themeIcon = document.getElementById("themeIcon");
+
 if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark-mode");
-}
 
-const themeButton = document.getElementById("themeButton");
+    themeText.textContent = "Day Theme";
+    themeIcon.src = "sun.png";
+}
 
 if (themeButton) {
     themeButton.addEventListener("click", function () {
@@ -10,10 +15,14 @@ if (themeButton) {
 
         if (document.body.classList.contains("dark-mode")) {
             localStorage.setItem("theme", "dark");
-            document.getElementById("themeButton").textContent = "Day Theme";
+
+            themeText.textContent = "Day Theme";
+            themeIcon.src = "sun.png";
         } else {
             localStorage.setItem("theme", "light");
-            document.getElementById("themeButton").textContent = "Night Theme";
+
+            themeText.textContent = "Night Theme";
+            themeIcon.src = "night-mode.png";
         }
     });
 }

@@ -12,7 +12,10 @@
 
 <body>
 
-    <button id="themeButton">Night Mode</button>
+    <button id="themeButton">
+        <img id="themeIcon" src="night-mode.png" alt="night-mode" class="theme-icon">
+        <span id="themeText">Night Mode</span>
+    </button>
     <a id="why_this_project" href="about.html">Why did I make this website?</a>
     <h2>
         The Question of This Week<br>
@@ -86,16 +89,41 @@
         .eq("week_number", weekNumber)
         .order("created_at", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
         if (questionError) {
             console.error("Question error:", questionError);
-        } else {
-            document.getElementById("question_en").textContent =
-                questionData.question_en;
-            document.getElementById("question_ko").textContent =
-                questionData.question_ko;
         }
+        
+        if (!questionData) {
+            console.log("No question exists for this week yet.");
+
+            document.getElementById("question_en").textContent =
+                "preparing the question for this week...";
+
+            document.getElementById("question_ko").textContent = 
+                "이번 주 질문을 준비하고 있어요...";
+
+            currentQuestionId = null;
+
+            const { data: generated, error: generateError } =
+                await db.functions.invoke("generate-question", {
+                    body: {
+                        weekNumber: weekNumber
+                    }
+                });
+
+            if (generateError) {
+                console.error("Generate question error:", generateError);
+                return;
+            }
+            return;
+        }
+        
+        document.getElementById("question_en").textContent =
+            questionData.question_en;
+        document.getElementById("question_ko").textContent =
+            questionData.question_ko;
 
         question_id = questionData.id;
     }
@@ -116,9 +144,9 @@
     // set the theme according to the current page theme. 
     // this is consistent even if the user refresh the page.
     if (localStorage.getItem("theme") === "dark") {
-        document.getElementById("themeButton").textContent = "Day Theme";
+        document.getElementById("themeText").textContent = "Day Theme";
     } else {
-        document.getElementById("themeButton").textContent = "Night Theme";
+        document.getElementById("themeText").textContent = "Night Theme";
     }
 
     refreshQuestion.addEventListener("click", async function() {
