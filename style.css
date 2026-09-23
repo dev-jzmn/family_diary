@@ -184,9 +184,27 @@ button {
     cursor: pointer;
 }
 
+#removePhotoButton{
+    color:#f1f1f1;
+    background-color: #fa7070;
+}
+
+body.dark-mode #removePhotoButton{
+    background-color: #ce4353;
+}
+
 #submitButton{
     width: 100%;
     margin-top: 20px;
+    color:#f7f7f7;
+    background-color:#6ea6d7;
+}
+
+body.dark-mode #submitButton{
+    width: 100%;
+    margin-top: 20px;
+    color:#f7f7f7;
+    background-color:#3b53cb;
 }
 
 #why_this_project{
