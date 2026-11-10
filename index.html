@@ -235,6 +235,8 @@
 
         const answer = document.getElementById("answer").value;
         const respondent = document.getElementById("respondent").value;
+        const params = new URLSearchParams(window.location.search);
+        const recipientId = params.get("recipient");
 
         if (answer.trim() === "" || respondent.trim() === "") {
             document.getElementById("message").textContent = "Please write your answer/name.";
@@ -243,12 +245,13 @@
         else{
             const currentQuestionId = question_id;
             const currentQuestion = document.getElementById("question_en").textContent;
-            const { error } = await db
+            const { error: responseError } = await db
             .from("responses")
             .insert({
                 question_id: currentQuestionId,
                 answer: answer,
-                respondent: respondent,
+                respondent: respondent,     
+                recipient_id: recipientId,     
                 week_number: weekNumber,
                 photo_path: photoPath
             });
