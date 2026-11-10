@@ -256,7 +256,7 @@
                 photo_path: photoPath
             });
 
-            if (error) {
+            if (responseError) {
                 console.error("Supabase error:", error);
                 document.getElementById("message").textContent =
                     "Something went wrong while submitting your answer.";
